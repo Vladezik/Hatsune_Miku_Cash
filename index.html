@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Касса 01 — Подсчет</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@500;700;800&family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <!-- Двойные хвосты на фоне -->
+    <div class="tails" aria-hidden="true">
+        <svg class="tail tail-l" viewBox="0 0 160 900" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="tailGradL" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#39c5bb" stop-opacity="0.95"/>
+                    <stop offset="0.7" stop-color="#39c5bb" stop-opacity="0.45"/>
+                    <stop offset="1" stop-color="#ff5fa2" stop-opacity="0"/>
+                </linearGradient>
+            </defs>
+            <path d="M60 0 C10 160 130 300 70 470 C30 590 110 720 60 900 L100 900 C150 720 70 590 110 470 C170 300 50 160 110 0 Z" fill="url(#tailGradL)"/>
+        </svg>
+        <svg class="tail tail-r" viewBox="0 0 160 900" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="tailGradR" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#39c5bb" stop-opacity="0.95"/>
+                    <stop offset="0.7" stop-color="#39c5bb" stop-opacity="0.45"/>
+                    <stop offset="1" stop-color="#ff5fa2" stop-opacity="0"/>
+                </linearGradient>
+            </defs>
+            <path d="M60 0 C10 160 130 300 70 470 C30 590 110 720 60 900 L100 900 C150 720 70 590 110 470 C170 300 50 160 110 0 Z" fill="url(#tailGradR)"/>
+        </svg>
+    </div>
+
+    <div class="app">
+        <header class="app-header">
+            <button id="themeToggle" class="icon-btn" aria-label="Тема">
+                <i class="fas fa-sun"></i>
+            </button>
+            <div class="brand">
+                <div class="brand-row">
+                    <svg class="leek" viewBox="0 0 32 32" aria-hidden="true">
+                        <g transform="rotate(38 16 16)">
+                            <rect x="13.5" y="13" width="5" height="18" rx="2.5" fill="#f2fff9" stroke="#9fd8c4" stroke-width="0.8"/>
+                            <path d="M16 14 C9 10 8 3 10 0 C13 4 15.5 8 16 14Z" fill="#4cc77a"/>
+                            <path d="M16 14 C23 10 24 3 22 0 C19 4 16.5 8 16 14Z" fill="#2fa860"/>
+                        </g>
+                    </svg>
+                    <h1 class="app-title">Касса</h1>
+                    <span class="tag-01">01</span>
+                </div>
+                <span class="brand-sub" lang="ja">初音ミク</span>
+            </div>
+            <button id="historyToggle" class="icon-btn" aria-label="История">
+                <i class="fas fa-history"></i>
+            </button>
+        </header>
+
+        <section class="target-section">
+            <label class="section-label">Целевая сумма</label>
+            <div class="target-input-wrap">
+                <input type="text" id="targetAmount" placeholder="0.00" inputmode="decimal" autocomplete="off">
+                <span class="currency">₴</span>
+            </div>
+            
+            <div class="progress-box" id="progressBox">
+                <div class="progress-info">
+                    <span>Набрано: <strong id="progressCurrent">0.00</strong> ₴</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="denoms-section">
+            <label class="section-label">Номиналы</label>
+            <div class="denoms-grid" id="denomsGrid"></div>
+        </section>
+
+        <button id="calculateBtn" class="btn-primary">
+            <i class="fas fa-calculator"></i>
+            <span>Рассчитать</span>
+        </button>
+
+        <div id="resultCard" class="result-card hidden">
+            <div class="receipt">
+                <div class="receipt-header">
+                    <i class="fas fa-music"></i>
+                    <span>ЧЕК ОТ МИКУ</span>
+                </div>
+                <div class="receipt-divider"></div>
+                <div id="receiptBody" class="receipt-body"></div>
+                <div class="receipt-divider dashed"></div>
+                <div class="receipt-total-row">
+                    <span>ИТОГО</span>
+                    <span id="receiptTotal">0.00 ₴</span>
+                </div>
+                <div class="receipt-diff-row" id="receiptDiffRow">
+                    <span>РАЗНИЦА</span>
+                    <span id="receiptDiff">0.00 ₴</span>
+                </div>
+                <div class="receipt-time" id="receiptTime"></div>
+            </div>
+            
+            <div class="result-actions">
+                <button id="saveToHistoryBtn" class="btn-secondary" style="flex: none; width: 100%;">
+                    <i class="fas fa-save"></i> В историю
+                </button>
+            </div>
+        </div>
+
+        <button id="resetBtn" class="btn-text-danger">
+            <i class="fas fa-trash-alt"></i> Очистить все
+        </button>
+    </div>
+
+    <div id="historySheet" class="sheet hidden">
+        <div class="sheet-overlay"></div>
+        <div class="sheet-content">
+            <div class="sheet-handle"></div>
+            <div class="sheet-header">
+                <h3>История подсчетов</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button id="exportHistoryBtn" class="btn-text-small" title="Экспортировать">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button id="clearHistoryBtn" class="btn-text-small">Очистить</button>
+                </div>
+            </div>
+            <div id="historyList" class="history-list">
+                <div class="history-empty"><span class="empty-note">♪</span>История пуста</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirmDialog" class="dialog-overlay hidden">
+        <div class="dialog">
+            <div class="dialog-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <h3>Очистить все?</h3>
+            <p>Все введенные данные и текущий расчет будут удалены.</p>
+            <div class="dialog-buttons">
+                <button id="confirmNo" class="btn-dialog">Отмена</button>
+                <button id="confirmYes" class="btn-dialog btn-dialog-primary">Очистить</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mikuWidget" class="miku hidden" role="status" aria-live="polite">
+        <div class="miku-bubble" id="mikuBubble"></div>
+        <div class="miku-avatar">
+            <img id="mikuImg" class="miku-img" alt="Мику" hidden>
+            <div id="mikuFallback" class="miku-fallback">
+                <i id="mikuFace" class="fas fa-face-smile-beam"></i>
+                <span class="tag-01">01</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+    <div id="confettiContainer" class="confetti-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>>
